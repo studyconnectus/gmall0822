@@ -20,6 +20,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<UmsMember> getAllUsers() {
-        return memberMapper.selectAllUsers();
+        return memberMapper.selectAll();
     }
 }

@@ -1,6 +1,7 @@
 package com.atguigu.gmall.user.mapper;
 
 import com.atguigu.gmall.user.bean.UmsMember;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
@@ -9,6 +10,6 @@ import java.util.List;
  * @date 2019/8/22
  * @describe
  */
-public interface MemberMapper {
+public interface MemberMapper extends Mapper<UmsMember> {
     List<UmsMember> selectAllUsers();
 }

@@ -10,5 +10,6 @@ import java.util.List;
  * @describe
  */
 public interface MemberService {
+
     List<UmsMember> getAllUsers();
 }

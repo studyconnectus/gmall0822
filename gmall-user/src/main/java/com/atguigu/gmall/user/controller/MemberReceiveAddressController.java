@@ -1,9 +1,7 @@
 package com.atguigu.gmall.user.controller;
 
-import com.atguigu.gmall.user.bean.UmsMember;
 import com.atguigu.gmall.user.bean.UmsMemberReceiveAddress;
 import com.atguigu.gmall.user.service.MemberReceiveAddressService;
-import com.atguigu.gmall.user.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,21 +11,20 @@ import java.util.List;
 
 /**
  * @author liumw
- * @date 2019/8/22
+ * @date 2019/8/23
  * @describe
  */
 @Controller
-public class MemberController {
+public class MemberReceiveAddressController {
+
 
     @Autowired
-    private MemberService memberService;
+    private MemberReceiveAddressService memberReceiveAddressService;
 
-
-    @RequestMapping("/getAllUsers")
+    @RequestMapping("/getAddressByMemberId")
     @ResponseBody
-    public List<UmsMember> getAllUsers(){
-        List<UmsMember> umsMembers = memberService.getAllUsers();
-        return umsMembers;
+    public List<UmsMemberReceiveAddress> getAddressByMemberId(Long memberId){
+        List<UmsMemberReceiveAddress> umsMemberReceiveAddresses = memberReceiveAddressService.selectAddressByMemberId(memberId);
+        return umsMemberReceiveAddresses;
     }
-
 }
