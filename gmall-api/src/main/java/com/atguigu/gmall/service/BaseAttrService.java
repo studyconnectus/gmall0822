@@ -1,6 +1,8 @@
 package com.atguigu.gmall.service;
 
 import com.atguigu.gmall.bean.PmsBaseAttrInfo;
+import com.atguigu.gmall.bean.PmsBaseAttrValue;
+import com.atguigu.gmall.bean.PmsBaseSaleAttr;
 
 import java.util.List;
 
@@ -15,5 +17,7 @@ public interface BaseAttrService {
 
     void saveAttrInfo(PmsBaseAttrInfo attrInfo);
 
-    PmsBaseAttrInfo getAttrValueList(Long attrId);
+    List<PmsBaseAttrValue> getAttrValueList(Long attrId);
+
+    List<PmsBaseSaleAttr> baseSaleAttrList();
 }
