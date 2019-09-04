@@ -1,4 +1,4 @@
-package com.atguigu.gmall.manage;
+package com.atguigu.gmall.item;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,14 +7,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class GmallManageServiceApplicationTests {
+public class GmallItemWebApplicationTests {
 
     @Test
     public void contextLoads() {
-
-        String s = "";
-        boolean matches = s.matches("");
-        System.out.println(matches);
     }
 
 }

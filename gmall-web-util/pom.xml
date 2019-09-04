@@ -26,9 +26,31 @@
             <artifactId>gmall-common-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!--  thymleaf支持包，可以设置松校验、热部署  -->
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-ext</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <exclusions>
+                <exclusion> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId></exclusion>
+                <exclusion> <groupId>log4j</groupId> <artifactId>log4j</artifactId> </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

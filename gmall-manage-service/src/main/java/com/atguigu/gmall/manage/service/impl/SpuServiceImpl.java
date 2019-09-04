@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.atguigu.gmall.bean.PmsProductImage;
 import com.atguigu.gmall.bean.PmsProductInfo;
 import com.atguigu.gmall.bean.PmsProductSaleAttr;
+import com.atguigu.gmall.bean.PmsProductSaleAttrValue;
 import com.atguigu.gmall.manage.mapper.PmsProductImageMapper;
 import com.atguigu.gmall.manage.mapper.PmsProductInfoMapper;
 import com.atguigu.gmall.manage.mapper.PmsProductSaleAttrMapper;
@@ -35,7 +36,7 @@ public class SpuServiceImpl implements SpuService {
     private PmsProductImageMapper pmsProductImageMapper;
 
     @Override
-    public List<PmsProductInfo> PmsspuList(Long catalog3Id) {
+    public List<PmsProductInfo> pmsSpuList(Long catalog3Id) {
         PmsProductInfo pmsProductInfo = new PmsProductInfo();
         pmsProductInfo.setCatalog3Id(catalog3Id);
         List<PmsProductInfo> pmsProductInfos = productInfoMapper.select(pmsProductInfo);
@@ -60,7 +61,7 @@ public class SpuServiceImpl implements SpuService {
                     pmsProductSaleAttrMapper.insert(x);
                     x.getSpuSaleAttrValueList().forEach(y->{
                         y.setProductId(pmsProductInfo.getId());
-                        y.setSaleAttrId(x.getId());
+                        y.setSaleAttrId(x.getSaleAttrId());
                         pmsProductSaleAttrValueMapper.insert(y);
                     });
                 });
@@ -68,5 +69,28 @@ public class SpuServiceImpl implements SpuService {
         }else {
             productInfoMapper.updateByPrimaryKeySelective(pmsProductInfo);
         }
+    }
+
+    @Override
+    public List<PmsProductSaleAttr> spuSaleAttrList(Long spuId) {
+        PmsProductSaleAttr saleAttr = new PmsProductSaleAttr();
+        saleAttr.setProductId(spuId);
+        List<PmsProductSaleAttr> saleAttrList = pmsProductSaleAttrMapper.select(saleAttr);
+        for (PmsProductSaleAttr productSaleAttr : saleAttrList) {
+            PmsProductSaleAttrValue saleAttrValue = new PmsProductSaleAttrValue();
+            saleAttrValue.setProductId(spuId);
+            saleAttrValue.setSaleAttrId(productSaleAttr.getSaleAttrId());
+            List<PmsProductSaleAttrValue> select = pmsProductSaleAttrValueMapper.select(saleAttrValue);
+            productSaleAttr.setSpuSaleAttrValueList(select);
+        }
+        return saleAttrList;
+    }
+
+    @Override
+    public List<PmsProductImage> spuImageList(Long spuId) {
+
+        PmsProductImage image = new PmsProductImage();
+        image.setProductId(spuId);
+        return pmsProductImageMapper.select(image);
     }
 }
