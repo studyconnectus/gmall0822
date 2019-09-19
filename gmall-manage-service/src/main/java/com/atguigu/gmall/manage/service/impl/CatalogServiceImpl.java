@@ -8,7 +8,6 @@ import com.atguigu.gmall.manage.mapper.Catalog1Mapper;
 import com.atguigu.gmall.manage.mapper.Catalog2Mapper;
 import com.atguigu.gmall.manage.mapper.Catalog3Mapper;
 import com.atguigu.gmall.service.CatalogService;
-import com.sun.org.apache.xml.internal.resolver.CatalogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

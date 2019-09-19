@@ -1,10 +1,7 @@
 package com.atguigu.gmall.manage.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.atguigu.gmall.bean.PmsProductImage;
-import com.atguigu.gmall.bean.PmsProductInfo;
-import com.atguigu.gmall.bean.PmsProductSaleAttr;
-import com.atguigu.gmall.bean.PmsProductSaleAttrValue;
+import com.atguigu.gmall.bean.*;
 import com.atguigu.gmall.manage.mapper.PmsProductImageMapper;
 import com.atguigu.gmall.manage.mapper.PmsProductInfoMapper;
 import com.atguigu.gmall.manage.mapper.PmsProductSaleAttrMapper;
@@ -13,7 +10,9 @@ import com.atguigu.gmall.service.SpuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author liumw
@@ -93,4 +92,37 @@ public class SpuServiceImpl implements SpuService {
         image.setProductId(spuId);
         return pmsProductImageMapper.select(image);
     }
+
+    @Override
+    public List<PmsProductSaleAttr> spuSaleAttrListCheckBySku(Long spuId,Long skuId) {
+        /*PmsProductSaleAttr productSaleAttr = new PmsProductSaleAttr();
+        productSaleAttr.setProductId(spuId);
+        List<PmsProductSaleAttr> saleAttrList = pmsProductSaleAttrMapper.select(productSaleAttr);
+        saleAttrList.forEach(x->{
+            PmsProductSaleAttrValue productSaleAttrValue = new PmsProductSaleAttrValue();
+            productSaleAttrValue.setProductId(spuId);
+            productSaleAttrValue.setSaleAttrId(x.getSaleAttrId());
+            x.setSpuSaleAttrValueList(pmsProductSaleAttrValueMapper.select(productSaleAttrValue));
+        });*/
+        List<PmsProductSaleAttr> saleAttrList = pmsProductSaleAttrMapper.selectSpuSaleAttrListCheckBySku(spuId,skuId);
+        return saleAttrList;
+    }
+
+    @Override
+    public Map<String, String> selectSkuSaleAttrValueListBySpu(Long spuId) {
+        List<PmsSkuInfo> pmsSkuInfos = pmsProductSaleAttrMapper.selectSkuSaleAttrValueListBySpu(71l);
+        Map<String,String> saleAttrValue = new HashMap<>();
+        for (PmsSkuInfo pmsSkuInfo : pmsSkuInfos) {
+            String k = "";
+            String v = pmsSkuInfo.getId().toString();
+
+            for (PmsSkuSaleAttrValue pmsSkuSaleAttrValue : pmsSkuInfo.getSkuSaleAttrValueList()) {
+                k += pmsSkuSaleAttrValue.getSaleAttrValueId() + "|";
+            }
+            saleAttrValue.put(k.substring(0,k.length() - 1),v);
+        }
+        return saleAttrValue;
+    }
+
+
 }

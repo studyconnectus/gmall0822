@@ -21,6 +21,7 @@ public class PmsProductSaleAttr implements Serializable {
     private Long saleAttrId;
     private String saleAttrName;
 
+
     @Transient
     List<PmsProductSaleAttrValue> spuSaleAttrValueList;
 
