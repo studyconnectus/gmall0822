@@ -80,7 +80,7 @@ public class SkuServiceImpl implements SkuService {
         PmsSkuInfo skuInfo = null;
         if (itemJson == null){
             //使用redis的分布式锁防止缓存击穿
-            String OK = jedis.set("item:" + skuId + ":lock", "1", "nx", "px", 10);
+            String OK = jedis.set("item:" + skuId + ":lock", "1", "nx", "px", 10*1000);
             if (StringUtils.isNotBlank(OK) && "OK".equals(OK)){
                 //设置分布式锁成功，从数据库查询数据
                 skuInfo = getSkuInfoFromDB(skuId);
