@@ -2,10 +2,7 @@ package com.atguigu.gmall.manage.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
-import com.atguigu.gmall.bean.PmsSkuAttrValue;
-import com.atguigu.gmall.bean.PmsSkuImage;
-import com.atguigu.gmall.bean.PmsSkuInfo;
-import com.atguigu.gmall.bean.PmsSkuSaleAttrValue;
+import com.atguigu.gmall.bean.*;
 import com.atguigu.gmall.manage.mapper.PmsSkuAttrValueMapper;
 import com.atguigu.gmall.manage.mapper.PmsSkuImageMapper;
 import com.atguigu.gmall.manage.mapper.PmsSkuInfoMapper;
@@ -101,6 +98,21 @@ public class SkuServiceImpl implements SkuService {
             skuInfo = JSON.parseObject(itemJson, PmsSkuInfo.class);
         }
         return skuInfo;
+    }
+
+    @Override
+    public List<PmsSkuInfo> getSkuInfoList(Long catelog3Id) {
+        PmsSkuInfo skuInfo = new PmsSkuInfo();
+        skuInfo.setCatalog3Id(catelog3Id);
+        List<PmsSkuInfo> select = skuInfoMapper.select(skuInfo);
+        for (PmsSkuInfo pmsSkuInfo : select) {
+            PmsSkuAttrValue skuAttrValue = new PmsSkuAttrValue();
+            skuAttrValue.setSkuId(pmsSkuInfo.getId());
+            List<PmsSkuAttrValue> select1 = skuAttrValueMapper.select(skuAttrValue);
+            pmsSkuInfo.setSkuAttrValueList(select1);
+
+        }
+        return select;
     }
 
 

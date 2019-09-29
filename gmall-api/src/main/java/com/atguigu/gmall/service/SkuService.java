@@ -2,6 +2,8 @@ package com.atguigu.gmall.service;
 
 import com.atguigu.gmall.bean.PmsSkuInfo;
 
+import java.util.List;
+
 /**
  * @author liumw
  * @date 2019/9/3
@@ -13,4 +15,6 @@ public interface SkuService {
     PmsSkuInfo getSkuInfoFromDB(Long skuId);
 
     PmsSkuInfo getSkuInfo(Long skuId);
+
+    List<PmsSkuInfo> getSkuInfoList(Long catelog3Id);
 }
