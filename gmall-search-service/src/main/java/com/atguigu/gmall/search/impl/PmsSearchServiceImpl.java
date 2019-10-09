@@ -44,7 +44,9 @@ public class PmsSearchServiceImpl implements PmsSearchService {
             SearchResult execute = jestClient.execute(search);
             List<PmsSearchSkuInfo> collect = new ArrayList<>();
             for (SearchResult.Hit<PmsSearchSkuInfo, Void> hit : execute.getHits(PmsSearchSkuInfo.class)) {
-                hit.source.setSkuName(hit.highlight.get("skuName").get(0));
+                if(hit.highlight != null && hit.highlight.get("skuName") != null && !hit.highlight.get("skuName").isEmpty()){
+                    hit.source.setSkuName(hit.highlight.get("skuName").get(0));
+                }
                 collect.add(hit.source);
             }
             return collect;
@@ -57,13 +59,14 @@ public class PmsSearchServiceImpl implements PmsSearchService {
     private String getDslStr(PmsSearchParam searchParam) {
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
-        List<PmsSkuAttrValue> skuAttrValueList = searchParam.getSkuAttrValueList();
-        if (searchParam.getSkuAttrValueList() != null && !searchParam.getSkuAttrValueList().isEmpty()){
-            for (PmsSkuAttrValue skuAttrValue : skuAttrValueList) {
-                TermQueryBuilder termQueryBuilder = new TermQueryBuilder("skuAttrValueList.valueId",skuAttrValue.getValueId());
+        String[] valueIds = searchParam.getValueId();
+        if (valueIds != null && valueIds.length > 0){
+            for (int i = 0; i < valueIds.length; i++) {
+                TermQueryBuilder termQueryBuilder = new TermQueryBuilder("skuAttrValueList.valueId",valueIds[i]);
                 queryBuilder.filter(termQueryBuilder);
             }
         }
+
         if (searchParam.getCatalog3Id() != null){
             TermQueryBuilder termQueryBuilder = new TermQueryBuilder("catalog3Id",searchParam.getCatalog3Id());
             queryBuilder.filter(termQueryBuilder);
