@@ -30,34 +30,35 @@ public class SearchController {
 
 
     @RequestMapping("/index")
-    public String index(){
+    public String index() {
         return "index";
     }
+
     @RequestMapping("/list.html")
-    public String list(PmsSearchParam pmsSearchParam, Model model){
+    public String list(PmsSearchParam pmsSearchParam, Model model) {
         List<PmsSearchSkuInfo> searchSkuInfos = searchService.searchPmsSkuInfoList(pmsSearchParam);
         Set<String> collect = searchSkuInfos.stream()
                 .map(x -> x.getSkuAttrValueList())
                 .flatMap(Collection::stream)
-                .map(x->x.getValueId().toString())
+                .map(x -> x.getValueId().toString())
                 .collect(Collectors.toSet());
         List<PmsBaseAttrInfo> attrValueListByValueId = baseAttrService.getAttrValueListByValueId(collect);
         List<PmsSearchCrumb> pmsSearchCrumbs = new ArrayList<>();
         //将已经选择的属性从属性列表里面删除
         String[] delValueId = pmsSearchParam.getValueId();
-        if (delValueId != null && delValueId.length > 0){
+        if (delValueId != null && delValueId.length > 0) {
             Iterator<PmsBaseAttrInfo> iterator = attrValueListByValueId.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 PmsBaseAttrInfo pmsBaseAttrInfo = iterator.next();
                 List<PmsBaseAttrValue> attrValueList = pmsBaseAttrInfo.getAttrValueList();
                 for (PmsBaseAttrValue value : attrValueList) {
                     Long valueId = value.getId();
                     for (String v : delValueId) {
-                        if (Objects.equals(valueId.toString(),v)){
+                        if (Objects.equals(valueId.toString(), v)) {
                             PmsSearchCrumb pmsSearchCrumb = new PmsSearchCrumb();
                             pmsSearchCrumb.setValueId(v);
                             pmsSearchCrumb.setValueName(value.getValueName());
-                            pmsSearchCrumb.setUrlParam(getUrlParam(pmsSearchParam,v));
+                            pmsSearchCrumb.setUrlParam(getUrlParam(pmsSearchParam, v));
                             pmsSearchCrumbs.add(pmsSearchCrumb);
                             iterator.remove();
                         }
@@ -65,45 +66,45 @@ public class SearchController {
                 }
             }
         }
-        if (StringUtils.isNotBlank(pmsSearchParam.getKeyword())){
-            model.addAttribute("keyword",pmsSearchParam.getKeyword());
+        if (StringUtils.isNotBlank(pmsSearchParam.getKeyword())) {
+            model.addAttribute("keyword", pmsSearchParam.getKeyword());
         }
 
 
-        model.addAttribute("attrValueSelectedList",pmsSearchCrumbs);
+        model.addAttribute("attrValueSelectedList", pmsSearchCrumbs);
 
-        model.addAttribute("urlParam",getUrlParam(pmsSearchParam));
-        model.addAttribute("skuLsInfoList",searchSkuInfos);
-        model.addAttribute("attrList",attrValueListByValueId);
+        model.addAttribute("urlParam", getUrlParam(pmsSearchParam));
+        model.addAttribute("skuLsInfoList", searchSkuInfos);
+        model.addAttribute("attrList", attrValueListByValueId);
         return "list";
     }
 
-    private String getUrlParam(PmsSearchParam pmsSearchParam,String ... delValueId) {
+    private String getUrlParam(PmsSearchParam pmsSearchParam, String... delValueId) {
 
         String keyword = pmsSearchParam.getKeyword();
         Long catalog3Id = pmsSearchParam.getCatalog3Id();
         String[] valueId = pmsSearchParam.getValueId();
         String urlParam = "";
-        if (StringUtils.isNotBlank(keyword)){
-            if (StringUtils.isNotBlank(urlParam)){
+        if (StringUtils.isNotBlank(keyword)) {
+            if (StringUtils.isNotBlank(urlParam)) {
                 urlParam = urlParam + "&";
             }
             urlParam = urlParam + "keyword=" + keyword;
         }
-        if (catalog3Id != null){
-            if (StringUtils.isNotBlank(urlParam)){
+        if (catalog3Id != null) {
+            if (StringUtils.isNotBlank(urlParam)) {
                 urlParam = urlParam + "&";
             }
             urlParam = urlParam + "catalog3Id=" + catalog3Id;
         }
-        if (valueId == null){
+        if (valueId == null) {
             return urlParam;
         }
         for (int i = 0; i < valueId.length; i++) {
-            if (delValueId != null && delValueId.length > 0 && Objects.equals(valueId[i],delValueId[0])){
+            if (delValueId != null && delValueId.length > 0 && Objects.equals(valueId[i], delValueId[0])) {
                 continue;
             }
-            if (StringUtils.isNotBlank(urlParam)){
+            if (StringUtils.isNotBlank(urlParam)) {
                 urlParam = urlParam + "&";
             }
             urlParam = urlParam + "valueId=" + valueId[i];
