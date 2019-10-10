@@ -5,6 +5,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public class PmsSkuInfo implements Serializable {
 
     private Long productId;
 
-    private Double price;
+    private BigDecimal price;
 
     private String skuName;
 
@@ -92,11 +93,11 @@ public class PmsSkuInfo implements Serializable {
         this.productId = productId;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
