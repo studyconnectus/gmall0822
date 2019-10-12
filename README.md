@@ -17,3 +17,6 @@ gmall-search-service:8073
 #购物车
 gmall-cart-web:8087
 gmall-cart-service:8077
+
+#用户认证中心
+gmall-passport-web:8085

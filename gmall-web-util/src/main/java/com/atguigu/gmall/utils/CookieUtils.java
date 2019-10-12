@@ -87,8 +87,9 @@ public class CookieUtils {
             serverName = serverName.toLowerCase();
             serverName = serverName.substring(7);
             final int end = serverName.indexOf("/");
-            serverName = serverName.substring(0, end);
-            final String[] domains = serverName.split("\\.");
+            domainName = serverName.substring(0, end);
+            //return serverName;
+            /*final String[] domains = serverName.split("\\.");
             int len = domains.length;
             if (len > 3) {
                 // www.xxx.com.cn
@@ -98,7 +99,7 @@ public class CookieUtils {
                 domainName = domains[len - 2] + "." + domains[len - 1];
             } else {
                 domainName = serverName;
-            }
+            }*/
         }
         if (domainName != null && domainName.indexOf(":") > 0) {
             String[] ary = domainName.split("\\:");

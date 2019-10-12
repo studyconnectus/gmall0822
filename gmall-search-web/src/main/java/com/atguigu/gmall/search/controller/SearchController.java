@@ -1,6 +1,7 @@
 package com.atguigu.gmall.search.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.atguigu.gmall.RequireLogin;
 import com.atguigu.gmall.bean.*;
 import com.atguigu.gmall.service.BaseAttrService;
 import com.atguigu.gmall.service.PmsSearchService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,8 +30,16 @@ public class SearchController {
     @Reference
     BaseAttrService baseAttrService;
 
+    @RequestMapping("/toTrade")
+    @RequireLogin(loginSuccess = true)
+    public String toTrade(HttpServletRequest request){
+        String memberId = (String)request.getAttribute("memberId");
+        String nickName = (String)request.getAttribute("nickName");
+        return "toTrade";
+    }
 
     @RequestMapping("/index")
+    @RequireLogin(loginSuccess = false)
     public String index() {
         return "index";
     }

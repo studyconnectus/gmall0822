@@ -56,8 +56,9 @@ public class CartController {
         cartItem.setProductSkuCode("111111111");
         cartItem.setModifyDate(new Date());
         //判断用户是否登录
-        Long userId = 11l;
-        if (userId == null){
+        Long memberId = (Long)request.getAttribute("memberId");
+        String nickName = (String)request.getAttribute("nickName");
+        if (memberId == null){
             //未登录 -判断cookie里面是否已经有值
             String cartListCookie = CookieUtils.getCookieValue(request, "cartListCookie", true);
             List<OmsCartItem> omsCartItemList = new ArrayList<>();
@@ -83,8 +84,8 @@ public class CartController {
         }else {
             //已经登录
             //获取购物车是否已经存在了当前添加的商品
-            cartItem.setMemberId(userId);
-            OmsCartItem omsCartItem = cartService.ifCartExistByUser(userId,skuId);
+            cartItem.setMemberId(memberId);
+            OmsCartItem omsCartItem = cartService.ifCartExistByUser(memberId,skuId);
             //如果不存在则将购物车添加到数据库中
             if (omsCartItem == null){
                 cartService.addCart(cartItem);
@@ -94,7 +95,7 @@ public class CartController {
                 cartService.updateCart(omsCartItem);
             }
             //同步缓存
-            cartService.flushCache(userId);
+            cartService.flushCache(memberId);
 
         }
         return "redirect:/success";
@@ -111,24 +112,26 @@ public class CartController {
                                 HttpServletRequest request,
                                 HttpServletResponse response,
                                 Model model){
-        Long userId = 11l;
+        Long memberId = (Long)request.getAttribute("memberId");
+        String nickName = (String)request.getAttribute("nickName");
         OmsCartItem omsCartItem = new OmsCartItem();
-        omsCartItem.setMemberId(userId);
+        omsCartItem.setMemberId(memberId);
         omsCartItem.setIsChecked(isChecked);
         omsCartItem.setProductSkuId(productSkuId);
         cartService.checkCart(omsCartItem);
-        List<OmsCartItem> cartList = cartService.getCartList(userId);
+        List<OmsCartItem> cartList = cartService.getCartList(memberId);
         model.addAttribute("cartList",cartList);
         return "cartListInner";
     }
 
     @RequestMapping("cartList")
     public String cartList(HttpServletRequest request, HttpServletResponse response, Model model){
-        Long userId = 11l;
+        Long memberId = (Long)request.getAttribute("memberId");
+        String nickName = (String)request.getAttribute("nickName");
         List<OmsCartItem> cartItems = null;
-        if (userId != null){
+        if (memberId != null){
             //用户已经登录-从缓存中获取
-            cartItems = cartService.getCartList(userId);
+            cartItems = cartService.getCartList(memberId);
         }else {
             //用户未登录-从cookie中获取
             String cartListCookie = CookieUtils.getCookieValue(request, "cartListCookie", true);
@@ -136,9 +139,15 @@ public class CartController {
                 cartItems = JSON.parseArray(cartListCookie, OmsCartItem.class);
             }
         }
+        BigDecimal bigDecimal = new BigDecimal(0);
         for (OmsCartItem cartItem : cartItems) {
             cartItem.setTotalPrice(cartItem.getPrice().multiply(new BigDecimal(cartItem.getQuantity())));
+            if (cartItem.getIsChecked() == 1){
+                bigDecimal = bigDecimal.add(cartItem.getTotalPrice());
+            }
         }
+        model.addAttribute("totalprice",bigDecimal);
+
         model.addAttribute("cartList",cartItems);
         return "cartList";
     }
