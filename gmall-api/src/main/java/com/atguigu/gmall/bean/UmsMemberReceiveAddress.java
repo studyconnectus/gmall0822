@@ -7,7 +7,7 @@ public class UmsMemberReceiveAddress implements Serializable {
 
     @Id
     private String id;
-    private String memberId;
+    private Long memberId;
     private String  name;
     private String  phoneNumber;
     private int defaultStatus;
@@ -25,11 +25,11 @@ public class UmsMemberReceiveAddress implements Serializable {
         this.id = id;
     }
 
-    public String getMemberId() {
+    public Long getMemberId() {
         return memberId;
     }
 
-    public void setMemberId(String memberId) {
+    public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
 

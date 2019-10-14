@@ -3,8 +3,10 @@ package com.atguigu.gmall.user.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.atguigu.gmall.bean.UmsMember;
+import com.atguigu.gmall.bean.UmsMemberReceiveAddress;
 import com.atguigu.gmall.user.mapper.MemberMapper;
 import com.atguigu.gmall.service.MemberService;
+import com.atguigu.gmall.user.mapper.UmsMemberReceiveAddressMapper;
 import com.atguigu.gmall.util.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.omg.CORBA.PRIVATE_MEMBER;
@@ -22,6 +24,9 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
     @Autowired
     private MemberMapper memberMapper;
+
+    @Autowired
+    private UmsMemberReceiveAddressMapper memberReceiveAddressMapper;
 
     @Autowired
     private RedisUtil redisUtil;
@@ -48,6 +53,14 @@ public class MemberServiceImpl implements MemberService {
             // 从数据库获取用户信息
             return getumsMemberFromDB(umsMember);
         }
+    }
+
+    @Override
+    public List<UmsMemberReceiveAddress> getUserReceiveAddress(Long memberId) {
+        UmsMemberReceiveAddress address = new UmsMemberReceiveAddress();
+        address.setMemberId(memberId);
+        List<UmsMemberReceiveAddress> select = memberReceiveAddressMapper.select(address);
+        return select;
     }
 
     private UmsMember getumsMemberFromDB(UmsMember umsMember) {

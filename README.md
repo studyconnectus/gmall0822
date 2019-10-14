@@ -20,3 +20,7 @@ gmall-cart-service:8077
 
 #用户认证中心
 gmall-passport-web:8085
+
+#订单
+gmall-order-web:8086
+gmall-order-serivce:8076
