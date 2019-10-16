@@ -24,3 +24,5 @@ gmall-passport-web:8085
 #订单
 gmall-order-web:8086
 gmall-order-serivce:8076
+
+payment:8088
